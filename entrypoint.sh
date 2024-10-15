@@ -2,7 +2,7 @@
 set -e
 
 contains_russian() {
-	echo "$1" | grep -i '[а-яА-Я]';
+	echo "$1" | grep -i '[а-яА-Я]'
 }
 
 git config --global credential.helper "store --file=.git/credentials"
@@ -18,9 +18,12 @@ fi
 git fetch origin
 
 changed_files=$(git diff --name-only "origin/$BASE_BRANCH" "$GITHUB_SHA")
-
+IFS=',' read -r -a exclude_files <<<"$EXCLUDE_FILES"
 need_throw_error=false
 for filename in $changed_files; do
+	if [[ " ${exclude_files[@]} " =~ " ${filename} " ]]; then
+		continue
+	fi
 	if [[ -f "$filename" ]]; then
 		if [[ "$filename" == *.blade.php ]]; then
 			line_number=0
