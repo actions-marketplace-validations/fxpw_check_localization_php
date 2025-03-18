@@ -25,7 +25,7 @@ for filename in $changed_files; do
 		continue
 	fi
 	if [[ -f "$filename" ]]; then
-		if [[ "$filename" == *.blade.php ]]; then
+		if [[ "$filename" == *.blade.php || "$filename" == *.vue ]]; then
 			line_number=0
 			while IFS= read -r line; do
 				line_number=$((line_number + 1))
